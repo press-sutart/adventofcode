@@ -6,7 +6,7 @@ The procedure to preprocess the input is not too interesting, so I will omit it.
 
 ## Naive Solution
 
-The simplest solution would be to iterate all over IDs. For each ID, check if it is invalid and within any of the given ranges. Sum up the IDs that satisfy both conditions.
+The simplest solution would be to iterate over all IDs from $`1`$ to $`M`$. For each ID, check if it is invalid and within any of the given ranges. Sum up the IDs that satisfy both conditions.
 
 The time complexity of this solution is $`O(NM)`$ which is certainly good enough if you're willing to wait for a few minutes.
 
@@ -51,7 +51,7 @@ $$i(\underbrace{0 \dots 0}_{k \text{ digits}} 1,r).$$
 
 It is well known that the sum of terms of any arithmetic progression can be computed in constant time using a formula.
 
-We also note that for a fixed $`r`$, $`i(n,r)`$ strictly increases with $`n`$. Hence, there exists some contiguous range of integers $`[s,e]`$ (denote an empty range with $`s > e`$) such that $`n`$ lies in $`[s,e]`$ if and only if $`i(n,r)`$ lies in $`[L,U]`$. $`[s,e]`$ can be split into disjoint ranges using the powers of $`10`$ as boundary points. Hence, the $`i(n,r)`$ form disjoint arithmetic progressions, and the number of arithmetic progressions is at most the number of digits $`\lceil \log_{10} M \rceil`$.
+We also note that for a fixed $`r`$, $`i(n,r)`$ strictly increases with $`n`$. Hence, there exists some contiguous range of integers $`[s,e]`$ (denote an empty range with $`s > e`$) such that $`n`$ lies in $`[s,e]`$ if and only if $`i(n,r)`$ lies in $`[L,U]`$. $`[s,e]`$ can be split into disjoint ranges using the powers of $`10`$ as boundary points. Hence, the $`i(n,r)`$ form disjoint arithmetic progressions. Also recall from the previous section that $`n`$ has at most $`\frac{\lceil \log_{10} M \rceil}{2}`$ digits. The number of arithmetic progressions is thus bounded above by $`\frac{\lceil \log_{10} M \rceil}{2}`$.
 
 Let $`s'`$ be the smallest $`n`$ such that $`i(n,r) \geq L`$. Let $`e'`$ be the largest $`n`$ such that $`i(n,r) \leq U`$, or $0$ if none exist. Then the range $`[s',e']`$ is a valid choice of $`[s,e]`$ above, because
 
@@ -60,7 +60,7 @@ Let $`s'`$ be the smallest $`n`$ such that $`i(n,r) \geq L`$. Let $`e'`$ be the 
 
 We find $`e'`$ as follows. Let $`d`$ be the number of digits in $`U`$. Note that the number of digits in an order-$`r`$ ID is necessarily a multiple of $`r`$. Consider two cases.
 
-1. If $`d`$ is not a multiple of $`r`$, then no order-$`r`$ ID has $`d`$ digits. The next largest possible number of digits is the largest multiple of $`r`$ that is smaller than $`d`$. The largest order-$`r`$ ID is solely composed of '$9$'s. We have $`e' = 10^{\lfloor \frac{d}{r} \rfloor} - 1`$.
+1. If $`d`$ is not a multiple of $`r`$, then no order-$`r`$ ID has $`d`$ digits. The next largest possible number of digits is the largest multiple of $`r`$ that is smaller than $`d`$. The largest order-$`r`$ ID is solely composed of $9$'s. We have $`e' = 10^{\lfloor \frac{d}{r} \rfloor} - 1`$.
 2. If $`d`$ is a multiple of $`r`$, then let $`n'`$ be the first $`\frac{d}{r}`$ digits of $`U`$, so that $`10^{\frac{d}{r}-1} \leq n' < 10^{\frac{d}{r}}`$. We construct $`i(n',r)`$ which has $`d`$ digits and the first $`\frac{d}{r}`$ digits are the same as $`U`$, so $`|U - i(n',r)| < 10^{d - \frac{d}{r}}`$. Also note that $`i(n',r)`$ is in the arithmetic progression with difference $`i(\underbrace{0 \dots 0}_{\frac{d}{r} - 1 \text{ digits}} 1,r) > 10^{d - \frac{d}{r}}`$. Thus, we further consider two cases.
    1. Suppose $`i(n',r) \leq U`$. If we add the common difference, we get $`i(n'+1,r) > U`$, so we return $`n'`$.
    2. Suppose $`i(n',r) > U`$. If we subtract the common difference, we get $`i(n'-1,r) < U`$, so we return $`n'-1`$.
